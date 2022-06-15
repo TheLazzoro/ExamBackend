@@ -37,6 +37,17 @@ public class RentalResource {
                 .build();
     }
 
+    @Path("")
+    @GET
+    @RolesAllowed("admin")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRentalsAll() {
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.getAll()))
+                .build();
+    }
+
     @Path("/user/{username}")
     @GET
     @RolesAllowed("user")

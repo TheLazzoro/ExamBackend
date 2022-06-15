@@ -123,6 +123,15 @@ class RentalFacadeTest {
     }
 
     @Test
+    void getAll() {
+        RentalsDTO rentalsDTO = facade.getAll();
+        int expected = 1;
+        int actual = rentalsDTO.getRentals().size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void getRentalsByTenant() {
         RentalsDTO rentals = facade.getRentalsByTenant(new TenantDTO(tenant1));
         int expected = 1;

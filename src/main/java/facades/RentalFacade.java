@@ -68,6 +68,21 @@ public class RentalFacade implements IRentalFacade {
     }
 
     @Override
+    public RentalsDTO getAll() {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            TypedQuery<Rental> tq = em.createQuery("select r from Rental r", Rental.class);
+            List<Rental> rentals = tq.getResultList();
+            List<RentalDTO> rentalDTOs = new ArrayList<>();
+            rentals.forEach(rental -> rentalDTOs.add(new RentalDTO(rental)));
+            return new RentalsDTO(rentalDTOs);
+        }finally {
+            em.close();
+        }
+    }
+
+    @Override
     public RentalDTO getById(long id) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
 
