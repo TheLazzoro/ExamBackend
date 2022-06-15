@@ -6,6 +6,7 @@ import entities.House;
 import entities.Role;
 import entities.Tenant;
 import entities.User;
+import errorhandling.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,7 @@ class TenantFacadeTest {
 
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
             em.createNamedQuery("Tenant.deleteAllRows").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(tenant1);
@@ -83,7 +85,7 @@ class TenantFacadeTest {
     }
 
     @Test
-    void getByUsername() {
+    void getByUsername() throws NotFoundException {
         TenantDTO tenantDTO = facade.getByUsername(tenant1.getUser().getUserName());
 
         assertNotNull(tenantDTO);

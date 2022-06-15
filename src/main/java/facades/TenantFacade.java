@@ -3,6 +3,7 @@ package facades;
 import dtos.TenantDTO;
 import dtos.TenantsDTO;
 import entities.Tenant;
+import errorhandling.NotFoundException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -38,14 +39,17 @@ public class TenantFacade implements ITenantFacade {
     }
 
     @Override
-    public TenantDTO getByUsername(String username) {
+    public TenantDTO getByUsername(String username) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
 
         try {
             TypedQuery<Tenant> tq = em.createQuery("select t from Tenant t where t.user.userName = :username", Tenant.class);
             tq.setParameter("username", username);
+            if (tq.getResultList().size() == 0)
+                throw new NotFoundException();
+
             return new TenantDTO(tq.getSingleResult());
-        }finally {
+        } finally {
             em.close();
         }
     }

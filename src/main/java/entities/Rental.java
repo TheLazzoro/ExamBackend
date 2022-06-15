@@ -21,6 +21,7 @@ public class Rental {
 
     @OneToOne
     private Tenant contactPerson;
+
     @ManyToMany
     @JoinTable(
             name = "RENTAL_TENANT",
@@ -30,6 +31,16 @@ public class Rental {
     HashSet<Tenant> tenants = new HashSet<>();
 
     public Rental() {
+    }
+
+    public Rental(House house, Date startDate, Date endDate, float priceAnnual, float deposit, Tenant contactPerson, HashSet<Tenant> tenants) {
+        this.house = house;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this. priceAnnual =  priceAnnual;
+        this.deposit = deposit;
+        this.contactPerson = contactPerson;
+        this.tenants = tenants;
     }
 
     public void setHouse(House house) {
@@ -54,5 +65,29 @@ public class Rental {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public float getPriceAnnual() {
+        return priceAnnual;
+    }
+
+    public float getDeposit() {
+        return deposit;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public HashSet<Tenant> getTenants() {
+        return tenants;
     }
 }
