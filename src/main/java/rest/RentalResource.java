@@ -16,7 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/house")
+@Path("/rental")
 public class RentalResource {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
@@ -36,6 +36,17 @@ public class RentalResource {
                 .ok()
                 .status(201)
                 .entity(created)
+                .build();
+    }
+
+    @Path("/user/{username}")
+    @GET
+    @RolesAllowed("user")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRentalsByUsername(@PathParam("username") String username) throws NotFoundException {
+        return Response
+                .ok()
+                .entity(GSON.toJson(FACADE.getRentalsByUsername(username)))
                 .build();
     }
 

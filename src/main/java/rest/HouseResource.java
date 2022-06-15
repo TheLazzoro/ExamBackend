@@ -25,6 +25,7 @@ public class HouseResource {
 
     @Path("")
     @GET
+    @RolesAllowed("admin")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getHousesAll() {
         HousesDTO houses =  FACADE.getAll();

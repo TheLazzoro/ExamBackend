@@ -1,7 +1,10 @@
 package facades;
 
 import dtos.RentalDTO;
+import dtos.RentalsDTO;
+import dtos.TenantDTO;
 import entities.*;
+import errorhandling.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +24,9 @@ class RentalFacadeTest {
 
     private static EntityManagerFactory emf;
     private static RentalFacade facade;
-    private static Rental rental;
+    private static Rental rental1;
     private static House house;
+    private static User user1, user2, user3;
     private static Tenant tenant1, tenant2, tenant3;
 
     @BeforeAll
@@ -48,11 +52,11 @@ class RentalFacadeTest {
         EntityManager em = emf.createEntityManager();
         Role userRole = em.find(Role.class, "user");
 
-        User user1 = new User("testuser", "testpass");
+        user1 = new User("testuser", "testpass");
         user1.addRole(userRole);
-        User user2 = new User("testuser2", "testpass2");
+        user2 = new User("testuser2", "testpass2");
         user2.addRole(userRole);
-        User user3 = new User("testuser3", "testpass3");
+        user3 = new User("testuser3", "testpass3");
         user3.addRole(userRole);
 
         tenant1 = new Tenant();
@@ -65,8 +69,13 @@ class RentalFacadeTest {
         tenant3.setUser(user3);
         tenant3.setName("Nikolaj");
 
-
         house = new House("testaddress", "testcity", 5);
+
+        HashSet<Tenant> tenants = new HashSet<>();
+        tenants.add(tenant1);
+        tenants.add(tenant2);
+        tenants.add(tenant3);
+        rental1 = new Rental(house, new Date(), new Date(), 100000, 30000, tenant1, tenants);
 
         try {
             em.getTransaction().begin();
@@ -78,6 +87,7 @@ class RentalFacadeTest {
             em.persist(tenant2);
             em.persist(tenant3);
             em.persist(house);
+            em.persist(rental1);
             em.getTransaction().commit();
 
         } finally {
@@ -95,7 +105,7 @@ class RentalFacadeTest {
         tenants.add(tenant1);
         tenants.add(tenant2);
         tenants.add(tenant3);
-        rental = new Rental(house, new Date(), new Date(), 100000, 30000, tenant1, tenants);
+        Rental rental = new Rental(house, new Date(), new Date(), 100000, 30000, tenant1, tenants);
 
         RentalDTO rentalDTO = new RentalDTO(rental);
         RentalDTO returned = facade.create(rentalDTO);
@@ -109,5 +119,23 @@ class RentalFacadeTest {
 
         assertEquals(rentalDTO.getDeposit(), returned.getDeposit());
         assertEquals(rentalDTO.getPriceAnnual(), returned.getPriceAnnual());
+    }
+
+    @Test
+    void getRentalsByTenant() {
+        RentalsDTO rentals = facade.getRentalsByTenant(new TenantDTO(tenant1));
+        int expected = 1;
+        int actual = rentals.getRentals().size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getRentalsByUsername() throws NotFoundException {
+        RentalsDTO rentals = facade.getRentalsByUsername(user1.getUserName());
+        int expected = 1;
+        int actual = rentals.getRentals().size();
+
+        assertEquals(expected, actual);
     }
 }
