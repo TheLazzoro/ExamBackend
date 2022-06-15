@@ -1,6 +1,5 @@
 package facades;
 
-import entities.RenameMe;
 import entities.User;
 import errorhandling.NotFoundException;
 import errorhandling.UserAlreadyExistsException;

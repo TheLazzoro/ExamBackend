@@ -27,7 +27,6 @@ public class ApplicationConfig extends Application {
         resources.add(errorhandling.UserAlreadyExistsExceptionMapper.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
         resources.add(rest.DemoResource.class);
-        resources.add(rest.RenameMeResource.class);
         resources.add(rest.HouseResource.class);
         resources.add(rest.TenantResource.class);
         resources.add(rest.RentalResource.class);
