@@ -68,6 +68,38 @@ public class RentalFacade implements IRentalFacade {
     }
 
     @Override
+    public RentalDTO getById(long id) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            Rental rental = em.find(Rental.class, id);
+            if (rental == null)
+                throw new NotFoundException("Rental with ID: " + id + " was not found.");
+
+            return new RentalDTO(rental);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void delete(RentalDTO rentalDTO) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Rental toDelete = em.find(Rental.class, rentalDTO.getId());
+
+        if(toDelete == null)
+            throw new NotFoundException("Rental with ID: " + rentalDTO.getId() + " was not found.");
+
+        try {
+            em.getTransaction().begin();
+            em.remove(toDelete);
+            em.getTransaction().commit();
+        }finally {
+            em.close();
+        }
+    }
+
+    @Override
     public RentalsDTO getRentalsByTenant(TenantDTO tenantDTO) {
         EntityManager em = emf.createEntityManager();
 
@@ -91,7 +123,7 @@ public class RentalFacade implements IRentalFacade {
 
         try {
             return getRentalsByTenant(tenantDTO);
-        }finally {
+        } finally {
             em.close();
         }
     }

@@ -23,6 +23,12 @@ public class Tenant {
     public Tenant() {
     }
 
+    public Tenant(String name, String phone, String job) {
+        this.name = name;
+        this.phone = phone;
+        this.job = job;
+    }
+
     public Long getId() {
         return id;
     }

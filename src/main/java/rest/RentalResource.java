@@ -2,8 +2,6 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.HouseDTO;
-import dtos.HousesDTO;
 import dtos.RentalDTO;
 import errorhandling.API_Exception;
 import errorhandling.NotFoundException;
@@ -50,4 +48,19 @@ public class RentalResource {
                 .build();
     }
 
+
+    @Path("/delete/{id}")
+    @DELETE
+    @RolesAllowed("admin")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") Long id) throws NotFoundException {
+        FACADE.delete(FACADE.getById(id));
+        String msg = "{\"msg\":\"Rental successfully deleted!\"}";
+
+        return Response
+                .ok()
+                .entity(msg)
+                .status(204)
+                .build();
+    }
 }

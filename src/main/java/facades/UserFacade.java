@@ -54,7 +54,6 @@ public class UserFacade {
         if (alreadyExists != null)
             throw new UserAlreadyExistsException("Username '" + username + "' already exists.");
 
-
         try {
 
             User user = new User(username, password);

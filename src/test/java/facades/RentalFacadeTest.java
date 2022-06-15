@@ -5,6 +5,7 @@ import dtos.RentalsDTO;
 import dtos.TenantDTO;
 import entities.*;
 import errorhandling.NotFoundException;
+import errorhandling.UserAlreadyExistsException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -137,5 +138,14 @@ class RentalFacadeTest {
         int actual = rentals.getRentals().size();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void delete() throws NotFoundException {
+        facade.delete(new RentalDTO(rental1));
+
+        Exception ex = assertThrows(NotFoundException.class, () -> {
+            facade.getById(rental1.getId());
+        });
     }
 }

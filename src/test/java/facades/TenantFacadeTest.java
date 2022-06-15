@@ -23,6 +23,7 @@ class TenantFacadeTest {
     private static EntityManagerFactory emf;
     private static TenantFacade facade;
     private static Tenant tenant1, tenant2;
+    private static House house1;
 
     @BeforeAll
     static void setup() {
@@ -61,6 +62,7 @@ class TenantFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
             em.createNamedQuery("Tenant.deleteAllRows").executeUpdate();
+            em.createNamedQuery("House.deleteAllRows").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(tenant1);
             em.persist(tenant2);
