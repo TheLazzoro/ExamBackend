@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 
 @Entity
+@NamedQuery(name = "Tenant.deleteAllRows", query = "DELETE from Tenant")
 public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

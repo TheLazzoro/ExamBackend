@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 @Entity
+@NamedQuery(name = "Rental.deleteAllRows", query = "DELETE from Rental")
 public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

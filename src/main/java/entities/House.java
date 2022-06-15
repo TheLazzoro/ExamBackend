@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@NamedQuery(name = "House.deleteAllRows", query = "DELETE from House")
 public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,12 @@ public class House {
     private List<Rental> rentals;
 
     public House() {
+    }
+
+    public House(String address, String city, int numberOfRooms) {
+        this.address = address;
+        this.city = city;
+        this.numberOfRooms = numberOfRooms;
     }
 
     public Long getId() {
