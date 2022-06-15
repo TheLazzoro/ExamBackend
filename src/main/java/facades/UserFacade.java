@@ -1,6 +1,7 @@
 package facades;
 
 import entities.Role;
+import entities.Tenant;
 import entities.User;
 
 import javax.persistence.EntityManager;
@@ -53,12 +54,17 @@ public class UserFacade {
         if (alreadyExists != null)
             throw new UserAlreadyExistsException("Username '" + username + "' already exists.");
 
+
         try {
+
             User user = new User(username, password);
             Role userRole = em.find(Role.class, "user");
             user.addRole(userRole);
+            Tenant tenant = new Tenant();
+            tenant.setUser(user);
+
             em.getTransaction().begin();
-            em.persist(user);
+            em.persist(tenant);
             em.getTransaction().commit();
 
         } finally {

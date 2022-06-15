@@ -14,7 +14,7 @@ public class Tenant {
     private String phone;
     private String job;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private User user;
 
     @ManyToMany(mappedBy = "tenants")
