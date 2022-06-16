@@ -1,13 +1,17 @@
 package facades;
 
+import dtos.HouseDTO;
 import dtos.TenantDTO;
 import dtos.TenantsDTO;
+import entities.Rental;
 import entities.Tenant;
 import errorhandling.NotFoundException;
+import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +43,23 @@ public class TenantFacade implements ITenantFacade {
     }
 
     @Override
+    public TenantsDTO getAllByHouse(HouseDTO houseDTO) {
+        EntityManager em = emf.createEntityManager();
+
+        try {
+            TypedQuery<Tenant> tq = em.createQuery("select distinct t from Tenant t join t.rentals rentals join rentals.tenants tenant where rentals.house.id = :houseId", Tenant.class);
+            tq.setParameter("houseId", houseDTO.getId());
+            List<Tenant> tenants = tq.getResultList();
+            List<TenantDTO> tenantDTOS = new ArrayList<>();
+            tenants.forEach(tenant -> tenantDTOS.add(new TenantDTO(tenant)));
+
+            return new TenantsDTO(tenantDTOS);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public TenantDTO getByUsername(String username) throws NotFoundException {
         EntityManager em = emf.createEntityManager();
 
@@ -52,5 +73,16 @@ public class TenantFacade implements ITenantFacade {
         } finally {
             em.close();
         }
+    }
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
+        EntityManager em = emf.createEntityManager();
+
+        Long ids = 4L;
+        TypedQuery<Tenant> tq = em.createQuery("select distinct t from Tenant t join t.rentals rentals join rentals.tenants tenant where rentals.house.id = :id", Tenant.class);
+        tq.setParameter("id", ids);
+
+        tq.getResultList().forEach(tenant -> System.out.println(tenant.getName()));
     }
 }

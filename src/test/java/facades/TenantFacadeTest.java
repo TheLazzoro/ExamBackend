@@ -1,11 +1,9 @@
 package facades;
 
+import dtos.HouseDTO;
 import dtos.TenantDTO;
 import dtos.TenantsDTO;
-import entities.House;
-import entities.Role;
-import entities.Tenant;
-import entities.User;
+import entities.*;
 import errorhandling.NotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,6 +14,9 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import java.util.Date;
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TenantFacadeTest {
@@ -24,6 +25,7 @@ class TenantFacadeTest {
     private static TenantFacade facade;
     private static Tenant tenant1, tenant2;
     private static House house1;
+    private static Rental rental1;
 
     @BeforeAll
     static void setup() {
@@ -57,6 +59,11 @@ class TenantFacadeTest {
         tenant1.setUser(user1);
         tenant2 = new Tenant();
         tenant2.setUser(user2);
+        HashSet<Tenant> tenants = new HashSet<>();
+        tenants.add(tenant1);
+        tenants.add(tenant2);
+        house1 = new House("en vej", "en by", 7);
+        rental1 = new Rental(house1, new Date(), new Date(), 35000, 20000, tenant2, tenants);
 
         try {
             em.getTransaction().begin();
@@ -66,6 +73,8 @@ class TenantFacadeTest {
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.persist(tenant1);
             em.persist(tenant2);
+            em.persist(house1);
+            em.persist(rental1);
             em.getTransaction().commit();
 
         }finally {
@@ -80,6 +89,15 @@ class TenantFacadeTest {
     @Test
     void getAll() {
         TenantsDTO tenantsDTO = facade.getAll();
+        int expected = 2;
+        int actual = tenantsDTO.getTenants().size();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void getAllByHouse() {
+        TenantsDTO tenantsDTO = facade.getAllByHouse(new HouseDTO(house1));
         int expected = 2;
         int actual = tenantsDTO.getTenants().size();
 
