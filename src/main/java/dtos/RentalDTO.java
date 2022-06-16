@@ -66,4 +66,32 @@ public class RentalDTO {
     public TenantsDTO getTenants() {
         return tenants;
     }
+
+    public void setHouse(HouseDTO house) {
+        this.house = house;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setPriceAnnual(float priceAnnual) {
+        this.priceAnnual = priceAnnual;
+    }
+
+    public void setDeposit(float deposit) {
+        this.deposit = deposit;
+    }
+
+    public void setContactPerson(TenantDTO contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+
+    public void setTenants(TenantsDTO tenants) {
+        this.tenants = tenants;
+    }
 }

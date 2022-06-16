@@ -142,4 +142,46 @@ public class RentalFacade implements IRentalFacade {
             em.close();
         }
     }
+
+    @Override
+    public RentalDTO edit(RentalDTO rentalDTO) throws NotFoundException {
+        EntityManager em = emf.createEntityManager();
+        Rental toEdit = em.find(Rental.class, rentalDTO.getId());
+        if(toEdit == null)
+            throw new NotFoundException("Rental not found.");
+
+        Tenant contactPerson = em.find(Tenant.class, rentalDTO.getContactPerson().getId());
+        if(contactPerson == null)
+            throw new NotFoundException("Contact person not found.");
+
+        HashSet<Tenant> tenantsNew = new HashSet<>();
+        for(int i = 0; i < rentalDTO.getTenants().getTenants().size(); i++) {
+            long id = rentalDTO.getTenants().getTenants().get(i).getId();
+            Tenant tenant = em.find(Tenant.class, id);
+            if(tenant == null)
+                throw new NotFoundException("Tenant not found.");
+
+            tenantsNew.add(tenant);
+        }
+
+        House houseNew = em.find(House.class, rentalDTO.getHouse().getId());
+        if(houseNew == null)
+            throw new NotFoundException("House not found.");
+
+        toEdit.setHouse(houseNew);
+        toEdit.setContactPerson(contactPerson);
+        toEdit.setTenants(tenantsNew);
+        toEdit.setPriceAnnual(rentalDTO.getPriceAnnual());
+        toEdit.setDeposit(rentalDTO.getDeposit());
+
+        try {
+            em.getTransaction().begin();
+            em.merge(toEdit);
+            em.getTransaction().commit();
+
+            return new RentalDTO(em.find(Rental.class, toEdit.getId()));
+        } finally {
+            em.close();
+        }
+    }
 }

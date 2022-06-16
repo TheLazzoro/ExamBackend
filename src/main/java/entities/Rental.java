@@ -63,10 +63,6 @@ public class Rental {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Date getStartDate() {
         return startDate;
     }
@@ -89,5 +85,25 @@ public class Rental {
 
     public HashSet<Tenant> getTenants() {
         return tenants;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setPriceAnnual(float priceAnnual) {
+        this.priceAnnual = priceAnnual;
+    }
+
+    public void setDeposit(float deposit) {
+        this.deposit = deposit;
+    }
+
+    public void setTenants(HashSet<Tenant> tenants) {
+        this.tenants = tenants;
     }
 }

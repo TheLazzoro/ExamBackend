@@ -11,6 +11,7 @@ public interface IRentalFacade {
     RentalsDTO getAll();
     RentalDTO getById(long id) throws NotFoundException;
     RentalsDTO getRentalsByTenant(TenantDTO tenantDTO);
+    RentalDTO edit(RentalDTO rentalDTO) throws NotFoundException;
     void delete(RentalDTO rentalDTO) throws NotFoundException;
 
 }

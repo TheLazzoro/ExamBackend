@@ -73,4 +73,17 @@ public class RentalResource {
                 .entity(msg)
                 .build();
     }
+
+    @Path("edit")
+    @PUT
+    @RolesAllowed("admin")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response edit(String content) throws NotFoundException {
+        RentalDTO edited = FACADE.edit(GSON.fromJson(content, RentalDTO.class));
+        return Response
+                .ok()
+                .entity(edited)
+                .build();
+    }
 }
