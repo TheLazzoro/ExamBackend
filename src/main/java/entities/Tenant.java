@@ -1,5 +1,8 @@
 package entities;
 
+import dtos.TenantDTO;
+import dtos.UserDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 
@@ -27,6 +30,12 @@ public class Tenant {
         this.name = name;
         this.phone = phone;
         this.job = job;
+    }
+
+    public Tenant(TenantDTO tenantDTO) {
+        this.name = tenantDTO.getName();
+        this.phone = tenantDTO.getPhone();
+        this.job = tenantDTO.getJob();
     }
 
     public Long getId() {

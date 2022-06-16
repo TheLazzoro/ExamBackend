@@ -95,7 +95,7 @@ public class CreateUserEndpointTest {
 
     @Test
     public void testCreateUser() {
-        String json = String.format("{username: \"%s\", password: \"%s\"}", "user2", "pass1234");
+        String json = String.format("{username: \"%s\", password: \"%s\", tenant: {}}", "user2", "pass1234");
         given()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(json)

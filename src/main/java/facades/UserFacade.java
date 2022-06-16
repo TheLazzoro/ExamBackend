@@ -60,7 +60,7 @@ public class UserFacade {
             User user = new User(userDTO.getUsername(), userDTO.getPassword());
             Role userRole = em.find(Role.class, "user");
             user.addRole(userRole);
-            Tenant tenant = new Tenant();
+            Tenant tenant = new Tenant(userDTO.getTenant());
             tenant.setUser(user);
 
             em.getTransaction().begin();
