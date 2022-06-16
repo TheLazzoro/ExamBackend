@@ -71,7 +71,6 @@ public class RentalResource {
         return Response
                 .ok()
                 .entity(msg)
-                .status(204)
                 .build();
     }
 }

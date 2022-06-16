@@ -37,6 +37,8 @@ class HouseFacadeTest {
 
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Tenant.deleteAllRows").executeUpdate();
             em.createNamedQuery("House.deleteAllRows").executeUpdate();
             em.persist(house1);
             em.persist(house2);

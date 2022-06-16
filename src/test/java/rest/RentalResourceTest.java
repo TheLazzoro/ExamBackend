@@ -202,6 +202,6 @@ public class RentalResourceTest {
                 .header("x-access-token", securityToken)
                 .delete("/rental/delete/{id}", id)
                 .then()
-                .statusCode(204);
+                .statusCode(200);
     }
 }
