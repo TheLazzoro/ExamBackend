@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.UserDTO;
 import entities.User;
 import errorhandling.NotFoundException;
 import errorhandling.UserAlreadyExistsException;
@@ -64,7 +65,7 @@ public class UserFacadeTest {
     @Test
     public void testCreateUserAlreadyExists() throws Exception {
         Exception ex = assertThrows(UserAlreadyExistsException.class, () -> {
-            facade.createUser("user1", "examplePass");
+            facade.createUser(new UserDTO("user1", "examplePass"));
         });
     }
 }

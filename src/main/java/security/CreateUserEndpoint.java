@@ -1,7 +1,10 @@
 package security;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dtos.UserDTO;
 import errorhandling.API_Exception;
 import errorhandling.ExceptionDTO;
 import errorhandling.UserAlreadyExistsException;
@@ -21,22 +24,17 @@ public class CreateUserEndpoint {
 
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     public static final UserFacade USER_FACADE = UserFacade.getUserFacade(EMF);
+    private static Gson GSON = new GsonBuilder().create();
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(String jsonString) throws API_Exception, UserAlreadyExistsException {
-        String username;
-        String password;
-        try {
-            JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            username = json.get("username").getAsString();
-            password = json.get("password").getAsString();
-        } catch (Exception e) {
-            throw new API_Exception("Malformed JSON Supplied", 400, e);
-        }
+        UserDTO userDTO = GSON.fromJson(jsonString, UserDTO.class);
+        if(userDTO.getUsername() == null || userDTO.getPassword() == null)
+            throw new API_Exception("Malformed JSON Supplied", 400);
 
-        USER_FACADE.createUser(username, password);
+        USER_FACADE.createUser(userDTO);
         String msg = "{\"msg\":\"Account successfully created!\"}";
 
         return Response

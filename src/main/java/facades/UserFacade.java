@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.UserDTO;
 import entities.Role;
 import entities.Tenant;
 import entities.User;
@@ -47,16 +48,16 @@ public class UserFacade {
         return user;
     }
 
-    public void createUser(String username, String password) throws UserAlreadyExistsException {
+    public void createUser(UserDTO userDTO) throws UserAlreadyExistsException {
         EntityManager em = emf.createEntityManager();
 
-        User alreadyExists = em.find(User.class, username);
+        User alreadyExists = em.find(User.class, userDTO.getUsername());
         if (alreadyExists != null)
-            throw new UserAlreadyExistsException("Username '" + username + "' already exists.");
+            throw new UserAlreadyExistsException("Username '" + userDTO.getUsername() + "' already exists.");
 
         try {
 
-            User user = new User(username, password);
+            User user = new User(userDTO.getUsername(), userDTO.getPassword());
             Role userRole = em.find(Role.class, "user");
             user.addRole(userRole);
             Tenant tenant = new Tenant();
