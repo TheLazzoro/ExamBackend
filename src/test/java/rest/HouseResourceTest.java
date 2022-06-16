@@ -92,6 +92,8 @@ public class HouseResourceTest {
             house1 = new House("testaddress", "testcity", 2);
 
             em.getTransaction().begin();
+            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Tenant.deleteAllRows").executeUpdate();
             em.createNamedQuery("House.deleteAllRows").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.createNamedQuery("Role.deleteAllRows").executeUpdate();
